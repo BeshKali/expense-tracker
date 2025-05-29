@@ -1,157 +1,651 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  /* Color Palette */
+  --primary-color: #6D55FF; /* A vibrant purple */
+  --primary-color-dark: #5843cc;
+  --secondary-color: #4CAF50; /* Green for income */
+  --accent-color: #F44336;   /* Red for expense */
+  --text-color: #333;
+  --text-color-light: #555;
+  --bg-color: #f4f7f6; /* Lighter, cleaner background */
+  --surface-color: #ffffff;
+  --border-color: #e0e0e0;
+  --disabled-color: #bdbdbd;
+
+  /* For focus rings with RGBA, if needed from primary color */
+  --primary-color-rgb: 109, 85, 255; /* RGB for #6D55FF */
+
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.08);
+
+  /* Transitions & Animations */
+  --transition-speed-fast: 0.2s;
+  --transition-speed-normal: 0.3s;
+  --transition-easing: cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth ease-out */
+
+  /* Borders */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem;  /* 8px */
+  --spacing-md: 1rem;    /* 16px */
+  --spacing-lg: 1.5rem;  /* 24px */
+  --spacing-xl: 2rem;    /* 32px */
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 100%; /* For easier rem calculations */
 }
 
 body {
-  background-color: #f7f7f7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: grid; /* Modern centering technique */
+  place-items: center;
   min-height: 100vh;
-  margin: 0;
-  font-family: 'Lato', sans-serif;
+  padding: var(--spacing-md);
+  line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scroll from animations */
 }
 
 .container {
-  margin: 30px auto;
-  width: 350px;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-lg);
+  width: 100%;
+  max-width: 450px; /* Increased max-width for better desktop view */
+  margin: var(--spacing-lg) auto;
+  animation: fadeInScaleUp 0.5s var(--transition-easing) forwards;
 }
 
+@keyframes fadeInScaleUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* This h1 style is intended for the main "Expense Tracker" title from Header.js */
 h1 {
-  letter-spacing: 1px;
-  margin: 0;
+  font-size: 1.75rem; /* 28px */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  color: var(--primary-color);
 }
 
-h3 {
-  border-bottom: 1px solid #bbb;
-  padding-bottom: 10px;
-  margin: 40px 0 10px;
+/* This h1 style can be used for the Balance amount if needed,
+   but the CSS currently doesn't differentiate between the main page title H1
+   and the Balance H1. You might want a specific class for Balance's H1 if you
+   want it styled differently than the main page title.
+   For now, it will inherit the above h1 style.
+*/
+.balance-title { /* Example class you could add to Balance component's h1 */
+  font-size: 2rem; /* Larger for balance */
+  margin-bottom: var(--spacing-xs);
+  /* other balance-specific styles */
 }
 
-h4 {
-  margin: 0;
+
+h3 { /* Used for "Add new transaction" and "History" */
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--text-color-light);
+}
+
+h4 { /* Used for "Your Balance", "Income", "Expense" */
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
   text-transform: uppercase;
+  color: var(--text-color-light);
+  margin-bottom: var(--spacing-xs);
 }
 
 .inc-exp-container {
-  background-color: #fff;
-  box-shadow: var(--box-shadow);
-  padding: 20px;
+  background-color: var(--surface-color); /* Could be slightly off-white like #fafafa */
+  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
   display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
+  justify-content: space-around; /* space-around for better distribution */
+  margin: var(--spacing-md) 0 var(--spacing-lg);
 }
 
 .inc-exp-container > div {
   flex: 1;
   text-align: center;
+  padding: 0 var(--spacing-sm); /* Add some padding */
 }
 
 .inc-exp-container > div:first-of-type {
-  border-right: 1px solid #dedede;
+  border-right: 1px solid var(--border-color);
 }
 
 .money {
-  font-size: 20px;
-  letter-spacing: 1px;
-  margin: 5px 0;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-top: var(--spacing-xs);
 }
 
 .money.plus {
-  color: #2ecc71;
+  color: var(--secondary-color);
 }
 
 .money.minus {
-  color: #c0392b;
+  color: var(--accent-color);
+}
+
+/* Form styles */
+.form-control { /* A common class for wrapping label and input pairs */
+  margin-bottom: var(--spacing-md);
 }
 
 label {
-  display: inline-block;
-  margin: 10px 0;
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+  font-size: 0.9rem; /* 14.4px */
+  color: var(--text-color-light);
 }
 
 input[type='text'],
 input[type='number'] {
-  border: 1px solid #dedede;
-  border-radius: 2px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
   display: block;
-  font-size: 16px;
-  padding: 10px;
+  font-size: 1rem; /* 16px */
+  padding: var(--spacing-sm) var(--spacing-md); /* More padding */
   width: 100%;
+  transition: border-color var(--transition-speed-fast) var(--transition-easing),
+              box-shadow var(--transition-speed-fast) var(--transition-easing);
+  background-color: var(--bg-color); /* Subtle difference from surface */
+}
+
+input[type='text']:focus,
+input[type='number']:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
 }
 
 .btn {
   cursor: pointer;
-  background-color: #9c88ff;
-  box-shadow: var(--box-shadow);
+  background-image: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+  box-shadow: var(--shadow-md);
   color: #fff;
-  border: 0;
+  border: none; /* Remove border */
+  border-radius: var(--border-radius-md);
   display: block;
-  font-size: 16px;
-  margin: 10px 0 30px;
-  padding: 10px;
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  padding: var(--spacing-md); /* More padding */
   width: 100%;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  transition: transform var(--transition-speed-fast) var(--transition-easing),
+              box-shadow var(--transition-speed-fast) var(--transition-easing),
+              background-image var(--transition-speed-normal) ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.btn:focus,
-.delete-btn:focus {
-  outline: 0;
+.btn:hover, .btn:focus-visible {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  background-image: linear-gradient(45deg, var(--primary-color-dark) 0%, var(--primary-color) 100%);
+  outline: none;
 }
+
+.btn:active {
+  transform: translateY(0px) scale(1);
+  box-shadow: var(--shadow-sm);
+}
+
 
 .list {
   list-style-type: none;
   padding: 0;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-xl);
 }
 
 .list li {
-  background-color: #fff;
-  box-shadow: var(--box-shadow);
-  color: #333;
+  background-color: var(--surface-color);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-color);
   display: flex;
   justify-content: space-between;
+  align-items: center; /* Vertically align items */
   position: relative;
-  padding: 10px;
-  margin: 10px 0;
+  padding: var(--spacing-md);
+  margin: var(--spacing-sm) 0;
+  border-radius: var(--border-radius-md);
+  border-left: 5px solid var(--disabled-color); /* Default border */
+  transition: transform var(--transition-speed-fast) var(--transition-easing),
+              box-shadow var(--transition-speed-normal) var(--transition-easing),
+              border-color var(--transition-speed-normal) var(--transition-easing),
+              opacity 0.3s ease; /* For potential exit animations */
+  animation: listItemFadeIn 0.4s var(--transition-easing) backwards;
+  animation-delay: calc(var(--item-index, 0) * 0.07s); /* Staggered animation based on --item-index */
+}
+
+@keyframes listItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+.list li:hover {
+  transform: translateX(5px) scale(1.02);
+  box-shadow: var(--shadow-md);
 }
 
 .list li.plus {
-  border-right: 5px solid #2ecc71;
+  border-left-color: var(--secondary-color);
 }
 
 .list li.minus {
-  border-right: 5px solid #c0392b;
+  border-left-color: var(--accent-color);
 }
+
+.list li .transaction-text { /* Class added in React's Transaction component */
+  flex-grow: 1;
+  margin-right: var(--spacing-sm);
+  overflow: hidden; /* Prevent long text from breaking layout */
+  text-overflow: ellipsis; /* Show ... for very long text */
+  white-space: nowrap; /* Keep text on one line */
+}
+
+.list li .transaction-amount { /* Class added in React's Transaction component */
+  font-weight: 600;
+  white-space: nowrap; /* Prevent amount from wrapping */
+}
+
 
 .delete-btn {
   cursor: pointer;
-  background-color: #e74c3c;
-  border: 0;
+  background-color: var(--accent-color);
+  border: none;
   color: #fff;
-  font-size: 20px;
-  line-height: 20px;
-  padding: 2px 5px;
+  font-size: 1rem; /* 16px for better icon feel */
+  width: 30px; /* Fixed width */
+  height: 30px; /* Fixed height */
+  border-radius: 50%; /* Make it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 50%;
-  left: 0;
-  transform: translate(-100%, -50%);
+  right: calc(var(--spacing-md) * -1 + 5px); /* Start slightly off-screen to the right */
+  transform: translateY(-50%) scale(0.8);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-speed-normal) var(--transition-easing),
+              transform var(--transition-speed-normal) var(--transition-easing),
+              right var(--transition-speed-normal) var(--transition-easing);
+  box-shadow: var(--shadow-sm);
+  line-height: 1; /* Reset line-height for icon centering */
 }
 
-.list li:hover .delete-btn {
+.list li:hover .delete-btn,
+.list li:focus-within .delete-btn { /* Show delete button when list item is hovered OR contains focus */
   opacity: 1;
+  transform: translateY(-50%) scale(1);
+  right: var(--spacing-md); /* Slide in from right */
 }
 
-@media (max-width: 320px) {
-  .container {
-    width: 300px;
+.delete-btn:hover, .delete-btn:focus-visible {
+  background-color: #a03025; /* Darken accent color on hover */
+  transform: translateY(-50%) scale(1.1);
+  outline: none;
+}
+
+.no-transactions-message { /* For the message in TransactionList when empty */
+    text-align: center;
+    color: var(--text-color-light);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  body {
+    padding: var(--spacing-sm);
   }
+  .container {
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) auto;
+  }
+  h1 {
+    font-size: 1.5rem; /* 24px */
+  }
+  .inc-exp-container {
+    flex-direction: column; /* Stack on smaller screens */
+    gap: var(--spacing-md);
+  }
+  .inc-exp-container > div {
+    padding: var(--spacing-sm) 0;
+  }
+  .inc-exp-container > div:first-of-type {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color); /* Add bottom border when stacked */
+    padding-bottom: var(--spacing-md);
+  }
+  .money {
+    font-size: 1.25rem; /* 20px */
+  }
+  .list li .transaction-text {
+    max-width: 150px; /* Further restrict text width on small screens if needed */
+  }
+  .delete-btn {
+    /* For very small screens, make delete button more prominent or always visible if touch targets are an issue */
+    /* Option 1: Make it slightly visible and easier to activate on hover/focus */
+    opacity: 0; /* Keep it hidden by default unless list item is interacted with */
+    transform: translateY(-50%) scale(0.9);
+    right: var(--spacing-sm);
+  }
+  .list li:hover .delete-btn,
+  .list li:focus-within .delete-btn {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+/* Accessibility: Focus visible for keyboard users */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.3);
+}
+/* Remove outline for buttons and inputs if they have custom focus styles already defined */
+.btn:focus-visible,
+input[type='text']:focus-visible,
+input[type='number']:focus-visible,
+.delete-btn:focus-visible {
+  outline: none; /* Already handled by their specific :focus or :focus-visible styles */
+}
+
+.list li:focus-within { /* Highlight list item when delete button (or any focusable element inside) is focused */
+    box-shadow: var(--shadow-md);
+    /* Optional: Change border color to primary to indicate focus within the item */
+    /* border-left-color: var(--primary-color) !important; */
+}
+/* Add to your existing CSS file */
+
+.form-control.type-selector {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-control.type-selector > label { /* The main "Type" label */
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+}
+
+.form-control.type-selector div {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.form-control.type-selector input[type="radio"] {
+  /* Hide the default radio button */
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+.form-control.type-selector .radio-label {
+  display: inline-block;
+  background-color: var(--bg-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-speed-fast) var(--transition-easing);
+  margin-left: 0; /* Reset any global label margin if needed */
+  margin-right: var(--spacing-sm); /* Space between radio options */
+  flex-grow: 1; /* Make labels take up space if in a flex container */
+  text-align: center;
+}
+
+.form-control.type-selector input[type="radio"]:checked + .radio-label {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-control.type-selector input[type="radio"]:focus-visible + .radio-label {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Optional: Group radio buttons horizontally */
+.form-control.type-selector > div:first-of-type {
+  margin-right: var(--spacing-sm); /* If you want to stack them and need space */
+}
+
+/* Better: Horizontal layout for radio options */
+.form-control.type-selector > div {
+  flex: 1; /* Each radio option takes equal width */
+}
+.form-control.type-selector {
+  display: flex; /* Lays out the "Expense" and "Income" options side-by-side */
+  gap: var(--spacing-sm); /* Adds space between the flex items */
+}
+.form-control.type-selector > label:first-child { /* Style for the "Type" label itself */
+  flex-basis: 100%; /* Make the "Type" label take full width above the radios */
+  margin-bottom: var(--spacing-sm);
+}
+/* Adjust if the main "Type" label is separate from the flex container */
+/* Assuming the "Type" label is outside the flex container of radios: */
+.form-control.type-selector {
+    /* ... existing form-control styles ... */
+}
+.form-control.type-selector .radio-options-container { /* Wrap radio divs in this */
+    display: flex;
+    gap: var(--spacing-sm);
+}
+.form-control.type-selector .radio-options-container > div {
+    flex: 1;
+}
+
+/* Simplified Horizontal Radio Layout */
+.form-control.type-selector .radio-group { /* Wrap your radio input/label pairs in a div with this class */
+  display: flex;
+  gap: var(--spacing-sm);
+}
+.form-control.type-selector .radio-group > div { /* Each radio option container */
+  flex: 1;
+}
+.form-control.type-selector .radio-group input[type="radio"] + .radio-label {
+  width: 100%; /* Make the label fill its container */
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* ... your existing CSS ... */
+
+/* Category Selector in AddTransaction form */
+.category-select {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  display: block;
+  font-size: 1rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  transition: border-color var(--transition-speed-fast) var(--transition-easing),
+              box-shadow var(--transition-speed-fast) var(--transition-easing);
+  background-color: var(--bg-color);
+  font-family: inherit; /* Ensure it inherits the Poppins font */
+  color: var(--text-color);
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Styling for transaction item details (text & category) */
+.list li {
+  /* Ensure flex properties are set up to handle multiple children well */
+  /* display: flex; -- already there */
+  /* align-items: center; -- already there */
+  /* justify-content: space-between; -- already there */
+  gap: var(--spacing-sm); /* Add some gap between elements in the li */
+}
+
+.transaction-details {
+  flex-grow: 1; /* Allow text and category to take available space */
+  display: flex;
+  flex-direction: column; /* Stack text and category vertically */
+  align-items: flex-start; /* Align them to the start */
+  margin-right: var(--spacing-sm);
+  overflow: hidden; /* To handle long text with ellipsis */
+}
+
+.transaction-text {
+  font-weight: 500;
+  /* white-space: nowrap; -- Remove if you want category below */
+  /* text-overflow: ellipsis; -- Remove if you want category below */
+  /* overflow: hidden; -- Remove if you want category below */
+}
+
+.transaction-category {
+  font-size: 0.8rem;
+  color: var(--text-color-light);
+  font-style: italic;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Ensure it doesn't overflow its parent */
+}
+
+.transaction-amount {
+  font-weight: 600;
+  white-space: nowrap; /* Prevent amount from wrapping */
+  margin-left: auto; /* Push amount to the right if actions are next to it */
+}
+
+/* Transaction actions wrapper */
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs); /* Space between edit and delete buttons */
+  margin-left: var(--spacing-sm); /* Space from amount or details */
+}
+
+
+/* Edit Button Styling */
+.edit-btn {
+  cursor: pointer;
+  background-color: var(--primary-color-dark); /* Or a different color like a blue or gray */
+  border: none;
+  color: #fff;
+  font-size: 0.8rem; /* Smaller than delete button */
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-speed-fast) ease;
+  opacity: 0; /* Hide by default, show on hover */
+  transform: scale(0.9);
+  transition: opacity var(--transition-speed-normal) var(--transition-easing),
+              transform var(--transition-speed-normal) var(--transition-easing);
+}
+
+.list li:hover .edit-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.edit-btn:hover, .edit-btn:focus-visible {
+  background-color: var(--primary-color); /* Darken on hover */
+  outline: none;
+}
+
+/* Adjust delete button positioning if edit button is present */
+.delete-btn {
+  /* position: static; Remove absolute positioning if it's part of flex flow */
+  /* transform: none; */
+  /* right: auto; */
+  /* top: auto; */
+  /* The existing delete button styles might need tweaking if it's no longer absolutely positioned */
+  /* If keeping absolute, ensure .list li is still position: relative */
+  /* For this example, let's assume it becomes part of the flex flow in .transaction-actions */
+  position: relative; /* Overriding previous absolute positioning */
+  top: auto;
+  left: auto;
+  transform: none;
+  opacity: 0; /* Keep it hidden until hover for consistency */
+  /* If you want delete btn to slide in from right it needs to remain absolute, or parent li should be flex with this as last item */
+}
+.list li:hover .delete-btn {
+    opacity: 1;
+}
+
+/* Better: Let both buttons be part of the flow and appear on hover */
+.list li .transaction-actions .delete-btn,
+.list li .transaction-actions .edit-btn {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.list li:hover .transaction-actions .delete-btn,
+.list li:hover .transaction-actions .edit-btn,
+.list li:focus-within .transaction-actions .delete-btn, /* Show on focus within li */
+.list li:focus-within .transaction-actions .edit-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* Cancel Edit Button */
+.btn-cancel {
+  background-image: none; /* Override gradient from .btn */
+  background-color: var(--text-color-light); /* A neutral color */
+  margin-top: var(--spacing-sm);
+}
+.btn-cancel:hover, .btn-cancel:focus-visible {
+  background-color: var(--text-color); /* Darken slightly */
+  box-shadow: var(--shadow-md);
 }

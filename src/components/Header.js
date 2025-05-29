@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 export const Header = () => {
   return (
-    <h2>
-      Expense Tracker
-    </h2>
-  )
-}
+    // Changed to h1 to match the main title styling from the CSS
+    <h1>Expense Tracker</h1>
+  );
+};
